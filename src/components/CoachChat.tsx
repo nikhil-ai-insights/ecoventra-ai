@@ -187,7 +187,7 @@ export default function CoachChat() {
       )}
 
       {/* Input controls panel */}
-      <div className="p-5 border-t border-slate-150 dark:border-slate-850">
+      <div className="p-5 border-t border-slate-150 dark:border-slate-850" role="form" aria-label="Eco Coach Chat Form">
         <div className="flex items-center space-x-2.5">
           <input
             type="text"
@@ -195,15 +195,17 @@ export default function CoachChat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend(input)}
             placeholder="Ask anything about minimizing your footprint..."
-            className="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl text-sm focus:outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-400 dark:placeholder:text-slate-600"
+            className="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors placeholder:text-slate-400 dark:placeholder:text-slate-600 font-sans"
             id="coach_input_field"
+            aria-label="Ask your sustainability coach a carbon footprint question"
           />
           <button
             onClick={() => handleSend(input)}
             className="p-3 bg-emerald-500 hover:bg-emerald-400 text-slate-955 rounded-xl font-bold transition-transform active:scale-95"
             id="coach_send_button"
+            aria-label="Send message to AI Coach"
           >
-            <Send className="h-4.5 w-4.5" />
+            <Send className="h-4.5 w-4.5" aria-hidden="true" />
           </button>
         </div>
       </div>

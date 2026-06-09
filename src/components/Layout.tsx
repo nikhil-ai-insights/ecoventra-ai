@@ -53,6 +53,14 @@ export default function Layout({ children, currentTab, onTabChange }: LayoutProp
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors duration-300">
       
+      {/* Skip to Content for assistive technologies */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-emerald-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-xl focus:font-bold focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400"
+      >
+        Skip to main content
+      </a>
+      
       {/* Top Header navbar */}
       <header className="sticky top-0 z-50 glass-panel border-b border-slate-200/50 dark:border-slate-800/80 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -198,7 +206,7 @@ export default function Layout({ children, currentTab, onTabChange }: LayoutProp
         )}
 
         {/* Scrolling Inner Content Frame */}
-        <main className="flex-1 overflow-y-auto relative p-4 md:p-6 lg:p-8">
+        <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto relative p-4 md:p-6 lg:p-8 outline-none" role="main">
           {children}
         </main>
       </div>

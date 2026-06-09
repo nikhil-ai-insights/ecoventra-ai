@@ -12,8 +12,21 @@ import { createServer as createViteServer } from "vite";
 const app = express();
 const PORT = 3000;
 
-// Middleware for parsing requests
-app.use(express.json({ limit: '10mb' }));
+// HTTP Security Headers Middleware
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: referrerPolicy; connect-src 'self' https:;"
+  );
+  next();
+});
+
+// Middleware for parsing requests (with strict JSON size constraints to prevent memory depletion DOS attacks)
+app.use(express.json({ limit: '2mb' }));
 
 // Set up Google Gen AI
 const apiKey = process.env.GEMINI_API_KEY || "";
@@ -206,6 +219,27 @@ app.get("/api/db/load", (req, res) => {
 app.post("/api/db/save", (req, res) => {
   try {
     const data = req.body;
+    
+    // Strict schema structure validator to safeguard persistence integrity
+    if (!data || typeof data !== "object") {
+      return res.status(400).json({ success: false, message: "Malformed payload format. Must be a JSON object." });
+    }
+    
+    // Verify core root database tables exist before storage write
+    if (!data.user || !Array.isArray(data.calculations) || !Array.isArray(data.goals) || !Array.isArray(data.challenges)) {
+      return res.status(400).json({ success: false, message: "Payload schema validation failed. Required root arrays are absent." });
+    }
+
+    // Defensive input filtering against XSS injection scripts
+    if (data.user && typeof data.user.displayName === 'string') {
+      data.user.displayName = data.user.displayName
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#x27;");
+    }
+
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
     res.json({ success: true, message: "Database saved successfully" });
   } catch (error) {

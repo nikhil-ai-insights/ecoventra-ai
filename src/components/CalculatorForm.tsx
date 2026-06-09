@@ -164,62 +164,70 @@ export default function CalculatorForm({ onSuccess }: CalculatorFormProps) {
           <div className="space-y-5 animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <Car className="h-4 w-4 mr-1.5 text-slate-400" />
+                <label htmlFor="carDistance" className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
+                  <Car className="h-4 w-4 mr-1.5 text-slate-400" aria-hidden="true" />
                   Car Driving (km / week)
                 </label>
                 <input 
+                  id="carDistance"
                   type="number" 
                   value={carDistance} 
                   onChange={(e) => setCarDistance(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                   placeholder="e.g. 100"
                   required
+                  min="0"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <Bike className="h-4 w-4 mr-1.5 text-slate-400" />
+                <label htmlFor="bikeDistance" className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
+                  <Bike className="h-4 w-4 mr-1.5 text-slate-400" aria-hidden="true" />
                   Cycling / Running (km / week)
                 </label>
                 <input 
+                  id="bikeDistance"
                   type="number" 
                   value={bikeDistance} 
                   onChange={(e) => setBikeDistance(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                   placeholder="e.g. 15"
                   required
+                  min="0"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <Car className="h-4 w-4 mr-1.5 text-slate-400" />
+                <label htmlFor="publicTransit" className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
+                  <Car className="h-4 w-4 mr-1.5 text-slate-400" aria-hidden="true" />
                   Public Transit - Metro / Bus / Subway (km / week)
                 </label>
                 <input 
+                  id="publicTransit"
                   type="number" 
                   value={publicTransit} 
                   onChange={(e) => setPublicTransit(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                   placeholder="e.g. 50"
                   required
+                  min="0"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <Plane className="h-4 w-4 mr-1.5 text-slate-400" />
+                <label htmlFor="flights" className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
+                  <Plane className="h-4 w-4 mr-1.5 text-slate-400" aria-hidden="true" />
                   Aviation / Flight Travel (hours / year)
                 </label>
                 <input 
+                  id="flights"
                   type="number" 
                   value={flights} 
                   onChange={(e) => setFlights(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                   placeholder="e.g. 6"
                   required
+                  min="0"
                 />
               </div>
             </div>
@@ -238,32 +246,36 @@ export default function CalculatorForm({ onSuccess }: CalculatorFormProps) {
           <div className="space-y-5 animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <Zap className="h-4 w-4 mr-1.5 text-slate-350" />
+                <label htmlFor="electricity" className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
+                  <Zap className="h-4 w-4 mr-1.5 text-slate-350" aria-hidden="true" />
                   Electricity Consumption (kWh / month)
                 </label>
                 <input 
+                  id="electricity"
                   type="number" 
                   value={electricity} 
                   onChange={(e) => setElectricity(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                   placeholder="e.g. 200"
                   required
+                  min="0"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <Snowflake className="h-4 w-4 mr-1.5 text-slate-350" />
+                <label htmlFor="acUsage" className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
+                  <Snowflake className="h-4 w-4 mr-1.5 text-slate-350" aria-hidden="true" />
                   Air-conditioning active (hours / day)
                 </label>
                 <input 
+                  id="acUsage"
                   type="number" 
                   value={acUsage} 
                   onChange={(e) => setACUsage(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                   placeholder="e.g. 5"
                   required
+                  min="0"
                 />
               </div>
             </div>
@@ -371,32 +383,36 @@ export default function CalculatorForm({ onSuccess }: CalculatorFormProps) {
           <div className="space-y-5 animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <ShoppingBag className="h-4 w-4 mr-1.5 text-slate-350" />
+                <label htmlFor="onlinePurchases" className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
+                  <ShoppingBag className="h-4 w-4 mr-1.5 text-slate-350" aria-hidden="true" />
                   Online deliveries (purchases / month)
                 </label>
                 <input 
+                  id="onlinePurchases"
                   type="number" 
                   value={onlinePurchases} 
                   onChange={(e) => setOnlinePurchases(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                   placeholder="e.g. 4"
                   required
+                  min="0"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <ShoppingBag className="h-4 w-4 mr-1.5 text-slate-350" />
+                <label htmlFor="clothingPurchases" className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
+                  <ShoppingBag className="h-4 w-4 mr-1.5 text-slate-350" aria-hidden="true" />
                   Clothing acquisitions (items / month)
                 </label>
                 <input 
+                  id="clothingPurchases"
                   type="number" 
                   value={clothingPurchases} 
                   onChange={(e) => setClothingPurchases(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                   placeholder="e.g. 1"
                   required
+                  min="0"
                 />
               </div>
             </div>

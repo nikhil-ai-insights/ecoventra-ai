@@ -184,6 +184,47 @@ export default function DashboardAnalytics({ onNavigate }: DashboardAnalyticsPro
         })}
       </div>
 
+      {/* Screen reader table alternative for data trend & category breakdown */}
+      <div className="sr-only" aria-live="polite">
+        <h2>Accessible Carbon Trend Data Table</h2>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Footprint (Emissions in kgCO2)</th>
+              <th scope="col">Carbon Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {chartData.map((d, idx) => (
+              <tr key={idx}>
+                <td>{d.date}</td>
+                <td>{d.Footprint} kgCO2</td>
+                <td>{d.Score} out of 100</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <h2>Accessible Category Breakdown Data Table</h2>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">Emissions (kgCO2)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {breakdownData.map((b, idx) => (
+              <tr key={idx}>
+                <td>{b.name}</td>
+                <td>{b.value} kgCO2</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       {/* Analytical Charts and Diagrams */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
