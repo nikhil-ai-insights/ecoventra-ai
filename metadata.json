@@ -1,0 +1,6 @@
+{
+  "name": "Ecoventra",
+  "description": "Ecoventra is an AI-powered climate-tech SaaS helping users understand, track, and reduce their carbon footprint with smart coaching, gamified challenges, bill analysis, and dynamic goals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
