@@ -39,6 +39,24 @@ const ai = new GoogleGenAI({
   }
 });
 
+// Simple in-memory cache for API requests to minimize expensive LLM calls and reduce latency
+const apiCache = new Map<string, { value: any; expiry: number }>();
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes cache duration
+
+function getCachedItem(key: string): any | null {
+  const cached = apiCache.get(key);
+  if (!cached) return null;
+  if (Date.now() > cached.expiry) {
+    apiCache.delete(key);
+    return null;
+  }
+  return cached.value;
+}
+
+function setCachedItem(key: string, value: any) {
+  apiCache.set(key, { value, expiry: Date.now() + CACHE_TTL_MS });
+}
+
 // JSON Local Database paths
 const DB_DIR = path.join(process.cwd(), "data");
 const DB_FILE = path.join(DB_DIR, "db.json");
@@ -257,6 +275,12 @@ app.post("/api/gemini/coach", async (req, res) => {
     });
   }
 
+  const cacheKey = `coach_${JSON.stringify(messages || "")}_${userContext?.carbonScore || ""}`;
+  const cached = getCachedItem(cacheKey);
+  if (cached) {
+    return res.json(cached);
+  }
+
   try {
     // Collect contextual calculations
     const scoreText = userContext?.carbonScore ? `Currently, the user has an outstanding Ecoventra Carbon Score of ${userContext.carbonScore}/100 and average monthly emissions of ${userContext.monthlyEmissions || "450"} kgCO2.` : "The user hasn't calculated their carbon footprint yet.";
@@ -276,7 +300,9 @@ app.post("/api/gemini/coach", async (req, res) => {
       contents: `System guidelines: ${systemInstruction}\n\nChat Conversation History:\n${formattedHistory}\n\nAssistant:`,
     });
 
-    res.json({ text: response.text });
+    const resultPayload = { text: response.text };
+    setCachedItem(cacheKey, resultPayload);
+    res.json(resultPayload);
   } catch (err: any) {
     console.error("Gemini Coach Error:", err);
     res.status(500).json({ error: err.message || "Failed to generate AI Coach insights." });
@@ -361,6 +387,12 @@ app.post("/api/gemini/goal-planner", async (req, res) => {
     });
   }
 
+  const cacheKey = `goal_${category || ""}_${title || ""}_${description || ""}`;
+  const cachedResponse = getCachedItem(cacheKey);
+  if (cachedResponse) {
+    return res.json(cachedResponse);
+  }
+
   try {
     const prompt = `Formulate a detailed sustainability reduction roadmap for the following user goal:
     Goal Title: "${title}"
@@ -395,6 +427,7 @@ app.post("/api/gemini/goal-planner", async (req, res) => {
     });
 
     const parsed = JSON.parse(response.text || "{}");
+    setCachedItem(cacheKey, parsed);
     res.json(parsed);
   } catch (err: any) {
     console.error("Gemini Goal Planner Error:", err);

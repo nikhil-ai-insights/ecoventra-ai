@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useMemo } from 'react';
 import { useApp } from './AppContext';
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -20,50 +21,50 @@ interface DashboardAnalyticsProps {
 export default function DashboardAnalytics({ onNavigate }: DashboardAnalyticsProps) {
   const { user, calculations, goals, challenges } = useApp();
 
-  // Pick the latest calculation as current metrics
-  const latestCalc = calculations[0] || {
+  // Pick the latest calculation as current metrics (Memoized to prevent recalculated allocation)
+  const latestCalc = useMemo(() => calculations[0] || {
     carbonScore: 75,
     totalEmissions: 410,
     annualForecast: 4.92,
     categoryBreakdown: { transport: 150, energy: 180, food: 60, shopping: 20 }
-  };
+  }, [calculations]);
 
-  const scoreColor = latestCalc.carbonScore >= 80 
+  const scoreColor = useMemo(() => latestCalc.carbonScore >= 80 
     ? 'text-emerald-500' 
     : latestCalc.carbonScore >= 60 
       ? 'text-cyan-500' 
-      : 'text-amber-500';
+      : 'text-amber-500', [latestCalc.carbonScore]);
 
   // Compute trees equivalent: 1 mature tree absorbs ~22kg of CO2 per year, or ~1.8kg per month
   // If baseline is 1000kg/mo and current is totalEmissions, then difference / 1.8 is trees equivalent
   const baselineEmissions = 850; // kgCO2 baseline
-  const savedEmissions = Math.max(0, baselineEmissions - latestCalc.totalEmissions);
-  const offsetTrees = Math.round(savedEmissions / 1.8);
+  const savedEmissions = useMemo(() => Math.max(0, baselineEmissions - latestCalc.totalEmissions), [latestCalc.totalEmissions]);
+  const offsetTrees = useMemo(() => Math.round(savedEmissions / 1.8), [savedEmissions]);
 
   // Recharts Carbon Trend Data
-  const trendData = [...calculations].reverse().map(c => ({
+  const trendData = useMemo(() => [...calculations].reverse().map(c => ({
     date: new Date(c.date).toLocaleDateString([], { month: 'short', day: 'numeric' }),
     Footprint: c.totalEmissions,
     Score: c.carbonScore
-  }));
+  })), [calculations]);
 
   // Fallback if empty calculations
-  const chartData = trendData.length > 0 ? trendData : [
+  const chartData = useMemo(() => trendData.length > 0 ? trendData : [
     { date: "Apr 10", Footprint: 590, Score: 52 },
     { date: "May 10", Footprint: 490, Score: 64 },
     { date: "Jun 09", Footprint: 370, Score: 78 }
-  ];
+  ], [trendData]);
 
   // Recharts Breakdown Data
-  const breakdownData = [
+  const breakdownData = useMemo(() => [
     { name: 'Transport', value: latestCalc.categoryBreakdown.transport, color: '#10B981' },
     { name: 'Energy', value: latestCalc.categoryBreakdown.energy, color: '#22D3EE' },
     { name: 'Food', value: latestCalc.categoryBreakdown.food, color: '#F59E0B' },
     { name: 'Shopping', value: latestCalc.categoryBreakdown.shopping, color: '#EF4444' }
-  ];
+  ], [latestCalc.categoryBreakdown]);
 
-  // Metrics details
-  const metrics = [
+  // Metrics details (stable useMemo dependency bounds)
+  const metrics = useMemo(() => [
     { 
       id: 'score',
       label: "Carbon Score", 
@@ -112,7 +113,7 @@ export default function DashboardAnalytics({ onNavigate }: DashboardAnalyticsPro
       icon: Flame,
       bg: "from-amber-500/10 to-orange-500/25"
     }
-  ];
+  ], [latestCalc, scoreColor, offsetTrees, savedEmissions, user?.streak]);
 
   return (
     <div className="space-y-8 animate-fade-in">

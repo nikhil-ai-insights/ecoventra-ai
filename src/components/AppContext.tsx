@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import { User, FootprintCalculation, SustainabilityGoal, Challenge, BillAnalysis, LeaderboardEntry } from '../types';
 
 interface AppContextType {
@@ -346,25 +346,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return newBill;
   };
 
+  const contextValue = useMemo(() => ({
+    user,
+    setUser,
+    calculations,
+    addCalculation,
+    goals,
+    addGoal,
+    updateGoalProgress,
+    createAiGoalPlan,
+    challenges,
+    completeChallenge,
+    bills,
+    analyzeBill,
+    leaderboard,
+    logout,
+    login,
+    isLoading
+  }), [user, calculations, goals, challenges, bills, leaderboard, isLoading]);
+
   return (
-    <AppContext.Provider value={{
-      user,
-      setUser,
-      calculations,
-      addCalculation,
-      goals,
-      addGoal,
-      updateGoalProgress,
-      createAiGoalPlan,
-      challenges,
-      completeChallenge,
-      bills,
-      analyzeBill,
-      leaderboard,
-      logout,
-      login,
-      isLoading
-    }}>
+    <AppContext.Provider value={contextValue}>
       {children}
     </AppContext.Provider>
   );
